@@ -1,11 +1,12 @@
 # GVersion
 
-GVersion is a simplified/faster version of [GitVersion](https://github.com/GitTools/GitVersion) to help you achieve Semantic Versioning on your project
-It's designed for those who want a simple tool to generate a GitVersion-like version number without the full functionality of GitVersion.
+GVersion is a simplified/faster version of [GitVersion](https://github.com/GitTools/GitVersion) to help you achieve Semantic Versioning on your project.
+
+It's designed for those who want a simple tool based on tags to generate a GitVersion-like version number without the full functionality of GitVersion.
 
 By saying simplified, GVersion only checks the following version sources:
 
-- Version numbers in branches (e.g. release/2.0.0)
+- Version numbers in current being built branch name (e.g. release/2.0.0)
 - the `next-version` in `GitVersionConfig.yaml` file (e.g next-version: 2.0.0)
 - the nearest tag (e.g. if the nearest tag is v2.0.0, then the version will 2.0.1)
 
