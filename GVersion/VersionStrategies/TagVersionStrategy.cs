@@ -11,7 +11,11 @@ namespace GVersion.VersionStrategies
         {
             try
             {
-                var versionStr = repo.Describe(repo.Head.Tip);
+                var versionStr = repo.Describe(repo.Head.Tip, new DescribeOptions()
+                {
+                    Strategy = DescribeStrategy.Tags,
+                    AlwaysRenderLongFormat = true
+                });
                 var match = Regex.Match(versionStr, @".*(\d+\.\d+\.\d+\-\d+).*");
                 if (!match.Success) return new Version(0, 0, 0, 0);
                 versionStr = match.Groups[1].ToString().Replace("-", ".");
