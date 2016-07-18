@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 using GVersionPluginInterface;
 using LibGit2Sharp;
 using Version = System.Version;
@@ -20,7 +21,9 @@ namespace GVersion.VersionStrategies
                 if (!match.Success) return new Version(0, 0, 0, 0);
                 versionStr = match.Groups[1].ToString().Replace("-", ".");
                 var curVer = new Version(versionStr);
-                var nextVer = new Version(curVer.Major, curVer.Minor, curVer.Build + 1, curVer.Revision);
+                var isHeadCommitTagged = curVer.Revision == 0;
+                var nextVer = new Version(curVer.Major, curVer.Minor,
+                   isHeadCommitTagged? curVer.Build : curVer.Build + 1, curVer.Revision);
                 return nextVer;
             }
             catch
