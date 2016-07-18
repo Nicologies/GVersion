@@ -54,3 +54,4 @@ bin/
 packages/
 *.user
 *.versionsBackup
+target/
