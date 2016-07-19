@@ -10,6 +10,8 @@ By saying simplified, GVersion only checks the following version sources:
 - the `next-version` in `GitVersionConfig.yaml` file (e.g next-version: 2.0.0)
 - the nearest tag (e.g. if the nearest tag is v2.0.0, then the version will 2.0.1)
 
+By saying faster, GVersion usually takes 1 second to work out the version number while GitVersion may take a few minutes (even more than 1 hour in some edge case)
+
 # Output Variables
 
 ## Teamcity
@@ -21,6 +23,8 @@ GVersion outputs the same variables as GitVersion does. Such as (not a full list
  - GitVersion.MajorMinorPatch : 2.1.1
  - GitVersion.BuildMetaData   : 85
  - GitVersion.FullSemVer      : 2.1.1-PullRequest.105+85
+
+One difference is that GVersion will always output the `BuildMetaData` even if it's zero.
 
 ## Other build servers: not supported yet.
 
