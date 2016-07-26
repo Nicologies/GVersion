@@ -8,20 +8,21 @@ namespace GVersion
 {
     public class VersionVariables : IVersionVariables
     {
-        public VersionVariables(Version ver, IRepository repo, string label)
+        public VersionVariables(Version ver, IRepository repo, string branchName)
         {
             Major = ver.Major.ToString(CultureInfo.InvariantCulture);
             Minor = ver.Minor.ToString(CultureInfo.InvariantCulture);
             Patch = ver.Build.ToString(CultureInfo.InvariantCulture);
             BuildMetaData = ver.Revision.ToString(CultureInfo.InvariantCulture);
             BuildMetaDataPadded = BuildMetaData.PadLeft(4, '0');
-            if (string.IsNullOrWhiteSpace(label))
+            if (string.IsNullOrWhiteSpace(branchName))
             {
-                label = repo.Head.FriendlyName;
+                branchName = repo.Head.FriendlyName;
             }
+            var label = GetBranchLabel(branchName);
             PreReleaseTag = label; 
             PreReleaseTagWithDash = $"-{PreReleaseTag}";
-            BranchName = label;
+            BranchName = branchName;
             FullBuildMetaData = $"{ver.Revision}.Branch.{BranchName}.Sha.{repo.Head.Tip.Sha}'";
             MajorMinorPatch = $"{ver.Major}.{ver.Minor}.{ver.Build}";
             SemVer = $"{ver.Major}.{ver.Minor}.{ver.Build}-{PreReleaseTag}";
@@ -68,5 +69,29 @@ namespace GVersion
         public string CommitsSinceVersionSourcePadded { get; }
 
         public string CommitDate { get; }
+
+        private static string GetBranchLabel(string branchName)
+        {
+            if (string.IsNullOrWhiteSpace(branchName))
+            {
+                return null;
+            }
+            var isReleaseBranch = Regex.Match(branchName, @"release-.*\d\.\d\.\d.*", RegexOptions.IgnoreCase);
+            if (isReleaseBranch.Success)
+            {
+                return "beta";
+            }
+            var isHotfixBranch = Regex.Match(branchName, @"hotfix-.*\d\.\d\.\d.*", RegexOptions.IgnoreCase);
+            if (isHotfixBranch.Success)
+            {
+                return "beta";
+            }
+            var isPullReq = Regex.Match(branchName, @"pull/(\d+)/.*");
+            if (isPullReq.Success)
+            {
+                return "PullRequest." + isPullReq.Groups[1];
+            }
+            return branchName;
+        }
     }
 }

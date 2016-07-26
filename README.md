@@ -35,9 +35,3 @@ One difference is that GVersion will always output the `BuildMetaData` even if i
 no configuration required, the only thing you need is to add GVersion as a build step to your project.
 
 You can change the `GitVersion` prefix of `GitVersion.FullSemVer` to something else by defining an env parameter "teamcity.GVersion.ParamPrefix"
-
-## Other build servers: not supported yet.
-
-# Collabrate with [PrExtras](https://github.com/Nicologies/PrExtras)
-
-GVersion is designed to be able to read the branch name of pull request that retrieved by [PrExtras](https://github.com/Nicologies/PrExtras); thereby displaying the real branch name in the semver instead of the pull request number.

@@ -54,23 +54,19 @@ public class BuildService extends BuildServiceAdapter {
     @NotNull
     private String getBranchName() {
         Map<String, String> configParams = getConfigParameters();
-        // https://github.com/Nicologies/PrExtras
-        String branchNameFromPrextras = "teamcity.build.pull_req.branch_name";
-        if(configParams.containsKey(branchNameFromPrextras)){
-            String branchName = configParams.get(branchNameFromPrextras);
-            if(StringUtil.isNotEmpty(branchName)){
-                return branchName;
+        String branchNameFromTeamcity = configParams.get("teamcity.build.branch");
+        boolean isBuildingPullReqMerge = configParams.containsValue("refs/pull/" + branchNameFromTeamcity + "/merge");
+        boolean isBuildingPullReqHead = configParams.containsValue("refs/pull/" + branchNameFromTeamcity + "/head");
+        boolean isPullRequestBuild = isBuildingPullReqHead || isBuildingPullReqMerge;
+        isPullRequestBuild &= StringUtil.isNumber(branchNameFromTeamcity);
+        if (isPullRequestBuild) {
+            if (isBuildingPullReqHead) {
+                return "pull/" + branchNameFromTeamcity + "/head";
+            }
+            if (isBuildingPullReqMerge) {
+                return "pull/" + branchNameFromTeamcity + "/merge";
             }
         }
-        String branchNameFromTeamcity = configParams.get("teamcity.build.branch");
-        boolean isPullRequestBuild = configParams.containsValue("refs/pull/" + branchNameFromTeamcity + "/merge")
-                || configParams.containsValue("refs/pull/" + branchNameFromTeamcity + "/head");
-        isPullRequestBuild &= StringUtil.isNumber(branchNameFromTeamcity);
-        if(isPullRequestBuild){
-            return "PullRequest." + branchNameFromTeamcity;
-        }
-        else{
-            return branchNameFromTeamcity;
-        }
+        return branchNameFromTeamcity;
     }
 }

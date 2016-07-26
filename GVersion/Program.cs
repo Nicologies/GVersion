@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using CommandLine;
 using CommandLine.Text;
 using GVersionPluginInterface;
@@ -20,10 +18,10 @@ namespace GVersion
         [Option('w', "workingdir", Required = false,
             HelpText = "Working directory.")]
         public string WorkingDir { get; set; } = ".";
-        [Option('b', "label", Required = false,
-                    HelpText = "The semver label for example the 'PullRequest.2500' in '1.10.1-PullRequest.2500+199'," +
-                               "or branch name.")]
-        public string Label { get; set; }
+        [Option('b', "branch", Required = false,
+                    HelpText = "Branch name or pull/{pull req num}/merge or pull/{pull req num}/head.\n" +
+                               "Current branch will be used if not specified.")]
+        public string Branch { get; set; }
 
         [HelpOption]
         public string GetUsage()
@@ -53,10 +51,10 @@ namespace GVersion
             }
             var prog = new Program();
             prog.ComposeParts();
-            Environment.Exit(prog.GetVersion(options.WorkingDir, options.Label) ? 0 : 1);
+            Environment.Exit(prog.GetVersion(options.WorkingDir, options.Branch) ? 0 : 1);
         }
 
-        private bool GetVersion(string repoPath, string label)
+        private bool GetVersion(string repoPath, string branchName)
         {
             if (!Repository.IsValid(repoPath))
             {
@@ -77,7 +75,8 @@ namespace GVersion
 
                 foreach (var output in VersionOutputs)
                 {
-                    output.OutputVersion(new VersionVariables(ver, repo, label), repo);
+                    output.OutputVersion(
+                        new VersionVariables(ver, repo, branchName), repo);
                 }
             }
             return true;
