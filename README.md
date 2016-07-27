@@ -19,7 +19,7 @@ By saying faster, GVersion usually takes 1 second to work out the version number
 GVersion outputs the same variables as GitVersion does. Such as (not a full list of the variables):
 
  - GitVersion.AssemblySemVer  : 2.1.1.0
- - GitVersion.BranchName      : PullRequest.105
+ - GitVersion.BranchName      : pull/105/merge
  - GitVersion.MajorMinorPatch : 2.1.1
  - GitVersion.BuildMetaData   : 85
  - GitVersion.FullSemVer      : 2.1.1-PullRequest.105+85
