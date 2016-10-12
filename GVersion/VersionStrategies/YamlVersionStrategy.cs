@@ -12,7 +12,9 @@ namespace GVersion.VersionStrategies
             object nextVersion;
             if (settings.TryGetValue("next-version", out nextVersion))
             {
-                return new Version(nextVersion.ToString() + ".0");
+                var tagVersionStrategy = new TagVersionStrategy();
+                var tagVersion = tagVersionStrategy.GetVersion(repo, knownHighestVersion);
+                return new Version(nextVersion.ToString() + "." + tagVersion.Revision);
             }
             return new Version(0,0,0,0);
         }
