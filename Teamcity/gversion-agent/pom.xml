@@ -6,7 +6,7 @@
     <parent>
         <artifactId>gversion</artifactId>
         <groupId>com.nicologies.gversion</groupId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
     </parent>
     <artifactId>gversion-agent</artifactId>
     <packaging>jar</packaging>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>com.nicologies.gversion</groupId>
             <artifactId>gversion-common</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.5</version>
         </dependency>
     </dependencies>
   <build>
