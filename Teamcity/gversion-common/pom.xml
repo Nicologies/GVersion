@@ -15,9 +15,9 @@
     <parent>
         <artifactId>gversion</artifactId>
         <groupId>com.nicologies.gversion</groupId>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
     </parent>
     <groupId>com.nicologies.gversion</groupId>
     <artifactId>gversion-common</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
 </project>
