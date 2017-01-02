@@ -23,13 +23,13 @@ namespace GVersion
             PreReleaseTag = label; 
             PreReleaseTagWithDash = $"-{PreReleaseTag}";
             BranchName = branchName;
-            FullBuildMetaData = $"{ver.Revision}.Branch.{BranchName}.Sha.{repo.Head.Tip.Sha}'";
+            FullBuildMetaData = $"{ver.Revision}.Branch.{BranchName}.Sha.{repo.Head.Tip.Sha}";
             MajorMinorPatch = $"{ver.Major}.{ver.Minor}.{ver.Build}";
             SemVer = $"{ver.Major}.{ver.Minor}.{ver.Build}-{PreReleaseTag}";
             AssemblySemVer = $"{ver.Major}.{ver.Minor}.{ver.Build}.0";
             FullSemVer = $"{SemVer}+{ver.Revision}";
             Sha = repo.Head.Tip.Sha;
-            InformationalVersion = $"{FullSemVer}.Branch.{BranchName}.Sha.{Sha}'";
+            InformationalVersion = $"{FullSemVer}.Branch.{BranchName}.Sha.{Sha}";
             CommitsSinceVersionSource = ver.Revision.ToString(CultureInfo.InvariantCulture);
             CommitsSinceVersionSourcePadded = CommitsSinceVersionSource.PadLeft(4, '0');
             CommitDate = repo.Head.Tip.Committer.When.Date.ToString("yyyy-MM-dd");
