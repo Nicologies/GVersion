@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+    <metadata>
+        <id>GVersion</id>
+
+        <version>1.0.7</version>
+
+        <authors>Nicologies</authors>
+
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+
+        <description>A simplified/faster version of GitVersion to help you achieve Semantic Versioning on your project.</description>
+
+        <copyright>Copyright ©2017 Nicologies</copyright>
+        <ProjectUrl>https://github.com/Nicologies/GVersion</ProjectUrl>
+        <Tags>gitversion semver versioning</Tags>
+        <dependencies>
+        </dependencies>
+    </metadata>
+
+    <!-- A readme.txt to display when the package is installed -->
+    <files>
+        <file src=".\bin\release\*" />
+        <file src="LICENSE.md" />
+    </files>
+</package>
