@@ -20,7 +20,7 @@
 
     <!-- A readme.txt to display when the package is installed -->
     <files>
-        <file src=".\bin\release\**\*.*" />
+        <file src=".\bin\release\**\*.*" target="tools" />
         <file src="..\LICENSE.md" />
     </files>
 </package>
