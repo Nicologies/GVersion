@@ -49,7 +49,6 @@
     <Compile Include="SettingsProvider.cs" />
     <Compile Include="VersionOutput\ConsoleVersionOutput.cs" />
     <Compile Include="VersionOutput\Teamcity.cs" />
-    <Compile Include="VersionStrategies\BranchNameVersionStrategy.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VersionStrategies\TagVersionStrategy.cs" />
