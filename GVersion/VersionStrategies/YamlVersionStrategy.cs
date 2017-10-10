@@ -6,17 +6,20 @@ namespace GVersion.VersionStrategies
 {
     public class YamlVersionStrategy : IVersionStrategy
     {
-        public Version GetVersion(IRepository repo, Version knownHighestVersion)
+        public Version GetVersion(IRepository repo, string repoFolder, Version knownHighestVersion)
         {
-            var settings = SettingsProvider.Instance.Settings;
-            object nextVersion;
-            if (settings.TryGetValue("next-version", out nextVersion))
+            if (repo.IsHeadCommitTagged())
+            {
+                return new Version(0, 0, 0, 0);
+            }
+            var settings = new YamlConfigReader(repoFolder).Settings;
+            if (settings.TryGetValue("next-version", out object nextVersion))
             {
                 var tagVersionStrategy = new TagVersionStrategy();
-                var tagVersion = tagVersionStrategy.GetVersion(repo, knownHighestVersion);
+                var tagVersion = tagVersionStrategy.GetVersion(repo, repoFolder, knownHighestVersion);
                 return new Version(nextVersion.ToString() + "." + tagVersion.Revision);
             }
-            return new Version(0,0,0,0);
+            return new Version(0, 0, 0, 0);
         }
 
         public string Name => nameof(YamlVersionStrategy);

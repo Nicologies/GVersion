@@ -9,7 +9,7 @@ namespace GVersion.VersionStrategies
 {
     public class TagVersionStrategy : IVersionStrategy
     {
-        public Version GetVersion(IRepository repo, Version knownHighestVersion)
+        public Version GetVersion(IRepository repo, string repoFolder, Version knownHighestVersion)
         {
             try
             {
@@ -24,16 +24,16 @@ namespace GVersion.VersionStrategies
                 var match = Regex.Match(versionStr, @".*?((\d+\.){2,3}\d+\-\d+).*");
                 if (!match.Success) return new Version(0, 0, 0, 0);
                 versionStr = string.Join(".",
-                    match.Groups[1].ToString().Split(new []{'.', '-'}, StringSplitOptions.RemoveEmptyEntries).Take(4));
+                    match.Groups[1].ToString().Split(new[] { '.', '-' }, StringSplitOptions.RemoveEmptyEntries).Take(4));
                 var curVer = new Version(versionStr);
-                var isHeadCommitTagged = repo.Tags.Any(x => x.PeeledTarget.Sha == repo.Head.Tip.Sha);
+                var isHeadCommitTagged = repo.IsHeadCommitTagged();
                 var revision = curVer.Revision;
-                if(match.Groups[1].Value.Count(x => x == '.') == 3)
+                if (match.Groups[1].Value.Count(x => x == '.') == 3)
                 {
-                    revision = isHeadCommitTagged? revision : commitsSinceLastTag;
+                    revision = isHeadCommitTagged ? revision : curVer.Revision + commitsSinceLastTag;
                 }
                 var nextVer = new Version(curVer.Major, curVer.Minor,
-                   isHeadCommitTagged? curVer.Build : curVer.Build + 1, revision);
+                   ShouldIncrease3rdNumber(repo, isHeadCommitTagged) ? curVer.Build + 1 : curVer.Build, revision);
                 return nextVer;
             }
             catch
@@ -46,6 +46,17 @@ namespace GVersion.VersionStrategies
         {
             var match = Regex.Match(versionStr, @".*-(\d*)-.*");
             return int.Parse(match.Groups[1].Value);
+        }
+
+        private bool ShouldIncrease3rdNumber(IRepository repo, bool isHeadCommitTagged)
+        {
+            var branchName = repo.Head.FriendlyName;
+            var match = Regex.Match(branchName, @"hotfix-.*", RegexOptions.IgnoreCase);
+            if (match.Success)
+            {
+                return false;
+            }
+            return !isHeadCommitTagged;
         }
 
         public string Name => nameof(TagVersionStrategy);

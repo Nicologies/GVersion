@@ -1,15 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using CommandLine;
 using CommandLine.Text;
-using GVersionPluginInterface;
-using LibGit2Sharp;
-using Version = System.Version;
 
 namespace GVersion
 {
@@ -32,16 +23,6 @@ namespace GVersion
     }
     class Program
     {
-        [ImportMany(typeof(IVersionStrategy))]
-        public IEnumerable<IVersionStrategy> VersionStrategies { get; set; }
-        [ImportMany(typeof(IVersionOutput))]
-        public IEnumerable<IVersionOutput> VersionOutputs { get; set; }
-
-        Program()
-        {
-            ComposeParts();
-        }
-
         static void Main(string[] args)
         {
             var options = new Options();
@@ -49,54 +30,8 @@ namespace GVersion
             {
                 Environment.Exit(-1);
             }
-            var prog = new Program();
-            prog.ComposeParts();
-            Environment.Exit(prog.GetVersion(options.WorkingDir, options.Branch) ? 0 : 1);
-        }
-
-        private bool GetVersion(string repoPath, string branchName)
-        {
-            if (!Repository.IsValid(repoPath))
-            {
-                Console.Error.WriteLine($"{repoPath} is not a valid repository");
-                return false;
-            }
-            using (var repo = new Repository(repoPath))
-            {
-                var ver = new Version(0, 0, 0, 0);
-                foreach (var strategy in VersionStrategies.OrderBy(r => r.ExecutionOrder))
-                {
-                    var newVer = strategy.GetVersion(repo, ver);
-                    if (newVer != null && newVer > ver)
-                    {
-                        ver = newVer;
-                    }
-                }
-
-                foreach (var output in VersionOutputs)
-                {
-                    output.OutputVersion(
-                        new VersionVariables(ver, repo, branchName), repo);
-                }
-            }
-            return true;
-        }
-
-        private void ComposeParts()
-        {
-            var thisAssemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
-
-            var pluginDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "GVersion", "plugins");
-            if (!Directory.Exists(pluginDir))
-            {
-                Directory.CreateDirectory(pluginDir);
-            }
-            var directoryCatalog = new DirectoryCatalog(pluginDir);
-            var pluginDirContainer = new CompositionContainer(directoryCatalog);
-
-            var container = new CompositionContainer(thisAssemblyCatalog, pluginDirContainer);
-            container.ComposeParts(this);
+            var calculator = new VersionCalculator();
+            Environment.Exit(calculator.GetVersion(options.WorkingDir, options.Branch) != null ? 0 : 1);
         }
     }
 }

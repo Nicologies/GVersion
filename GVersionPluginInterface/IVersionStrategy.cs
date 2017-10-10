@@ -7,7 +7,7 @@ namespace GVersionPluginInterface
     [InheritedExport]
     public interface IVersionStrategy
     {
-        Version GetVersion(IRepository repo, Version knownHighestVersion);
+        Version GetVersion(IRepository repo, string repoFolder, Version knownHighestVersion);
         string Name { get; }
         int ExecutionOrder { get; }
     }

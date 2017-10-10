@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using GVersionPluginInterface;
 using LibGit2Sharp;
 
@@ -12,11 +11,6 @@ namespace GVersion.VersionOutput
 
         public Teamcity()
         {
-            object prefix;
-            if (SettingsProvider.Instance.Settings.TryGetValue(KeyOfTeamcityGVersionParamPrefix, out prefix))
-            {
-                ParamPrefix = prefix.ToString();
-            }
             var fromEnv = Environment.GetEnvironmentVariable(KeyOfTeamcityGVersionParamPrefix);
             if (!string.IsNullOrWhiteSpace(fromEnv))
             {

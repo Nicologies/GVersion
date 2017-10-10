@@ -20,7 +20,7 @@ namespace GVersion
                 branchName = repo.Head.FriendlyName;
             }
             var label = GetBranchLabel(branchName);
-            PreReleaseTag = label; 
+            PreReleaseTag = label;
             PreReleaseTagWithDash = $"-{PreReleaseTag}";
             BranchName = branchName;
             FullBuildMetaData = $"{ver.Revision}.Branch.{BranchName}.Sha.{repo.Head.Tip.Sha}";
