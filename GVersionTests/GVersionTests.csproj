@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateVersionStrategyTests.cs" />
     <Compile Include="GVersionTestBase.cs" />
     <Compile Include="GVersionTestsWithTagAndYml.cs" />
     <Compile Include="GVersionTestsWithTag.cs" />

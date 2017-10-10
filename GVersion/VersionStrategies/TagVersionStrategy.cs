@@ -50,9 +50,7 @@ namespace GVersion.VersionStrategies
 
         private bool ShouldIncrease3rdNumber(IRepository repo, bool isHeadCommitTagged)
         {
-            var branchName = repo.Head.FriendlyName;
-            var match = Regex.Match(branchName, @"hotfix-.*", RegexOptions.IgnoreCase);
-            if (match.Success)
+            if (repo.IsHotFixBranch())
             {
                 return false;
             }

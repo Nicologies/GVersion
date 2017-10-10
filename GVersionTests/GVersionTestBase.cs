@@ -10,6 +10,7 @@ namespace GVersionTests
 {
     public class GVersionTestBase
     {
+        private const string ConfigFile = "GitVersionConfig.yaml";
         protected IRepository _repo;
         protected string _repoFolder;
         protected Signature _author = new Signature("user", "email@email.com", DateTime.Now);
@@ -58,9 +59,27 @@ namespace GVersionTests
 
         protected void VersionInYmlIs(string version)
         {
-            var file = Path.Combine(_repoFolder, "GitVersionConfig.yaml");
-            File.WriteAllText(file, $"next-version: {version}");
+            WriteToConfig($"next-version: {version}");
+            string file = GetConfigFileFullPath();
             CommitFile($"Change Version in Yml to {version}", file);
+        }
+
+        protected void ToggleDateVersionStrategy(bool enabled)
+        {
+            WriteToConfig($"EnableDateVersionStrategy: {enabled}");
+            string file = GetConfigFileFullPath();
+            CommitFile($"Toggle EnableDateVersionStrategy in Yml to {enabled}", file);
+        }
+
+        private void WriteToConfig(string content)
+        {
+            string file = GetConfigFileFullPath();
+            File.WriteAllText(file, content);
+        }
+
+        private string GetConfigFileFullPath()
+        {
+            return Path.Combine(_repoFolder, ConfigFile);
         }
 
         protected void BranchIs(string branch)

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RepositoryExtensions.cs" />
+    <Compile Include="VersionStrategies\DateVersionStrategy.cs" />
     <Compile Include="YamlConfigReader.cs" />
     <Compile Include="VersionCalculator.cs" />
     <Compile Include="VersionOutput\ConsoleVersionOutput.cs" />
