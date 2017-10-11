@@ -7,6 +7,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace GVersion
 {
@@ -59,10 +60,50 @@ namespace GVersion
                 foreach (var output in VersionOutputs)
                 {
                     output.OutputVersion(
-                        new VersionVariables(ver, repo, branchName), repo);
+                        new VersionVariables(ver, repo, GetPreReleaseTag(repo, repoPath, branchName), branchName), repo);
                 }
                 return ver;
             }
+        }
+
+
+        private static string GetPreReleaseTag(IRepository repo, string repoPath, string branchName)
+        {
+            if (string.IsNullOrWhiteSpace(branchName))
+            {
+                branchName = repo.Head.FriendlyName;
+            }
+            var isFeatureBranch = Regex.Match(branchName, @"feature-.*", RegexOptions.IgnoreCase);
+            if (isFeatureBranch.Success)
+            {
+                return "feature";
+            }
+            var isPullReq = Regex.Match(branchName, @".*pull/(\d+)/.*");
+            if (isPullReq.Success)
+            {
+                return "PullRequest." + isPullReq.Groups[1];
+            }
+
+            var settings = new YamlConfigReader(repoPath).Settings;
+            if (settings.TryGetValue("PreReleaseTag", out var prereleaseTag))
+            {
+                var strPrereleaseTag = prereleaseTag.ToString();
+                return strPrereleaseTag.ToString().ToLowerInvariant() == "stable" ? "" : strPrereleaseTag;
+            }
+            
+            var isReleaseBranch = Regex.Match(branchName, @"release-.*", RegexOptions.IgnoreCase);
+            if (isReleaseBranch.Success)
+            {
+                return "";
+            }
+           
+            var isHotfixBranch = repo.IsHotFixBranch();
+            if (isHotfixBranch)
+            {
+                return "hotfix";
+            }
+            
+            return branchName;
         }
     }
 }

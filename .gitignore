@@ -56,3 +56,4 @@ packages/
 *.versionsBackup
 target/
 *.nupkg
+target/
