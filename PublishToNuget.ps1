@@ -6,3 +6,7 @@ param (
 $ErrorActionPreference = 'Stop'
 $file = gci -recurse -filter "*.nupkg" -File -Path dist | sort -property LastWriteTime | Select-Object -Last 1
 nuget push $file.FullName -Source "https://www.nuget.org/api/v2/package" -ApiKey $apikey
+if($LASTEXITCODE -ne 0)
+{
+    exit $LASTEXITCODE
+}
