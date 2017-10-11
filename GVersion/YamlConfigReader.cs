@@ -5,13 +5,17 @@ namespace GVersion
 {
     class YamlConfigReader
     {
-        public Dictionary<object, object> Settings { get; private set; }
+        public Dictionary<object, object> Settings { get; private set; } = new Dictionary<object, object>();
         public YamlConfigReader(string repoFolder)
         {
-            var configFile = Path.Combine(repoFolder, "GitVersionConfig.yaml");
+            Read(repoFolder, "GitVersionConfig.yaml");
+            Read(repoFolder, "GitVersion.yaml");
+        }
+        private void Read(string repoFolder, string ymlFileName)
+        {
+            var configFile = Path.Combine(repoFolder, ymlFileName);
             if (!File.Exists(configFile))
             {
-                Settings = new Dictionary<object, object>();
                 return;
             }
             var yaml = new YamlDotNet.Serialization.Deserializer();
