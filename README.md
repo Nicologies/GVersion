@@ -1,3 +1,5 @@
+# Deprecated
+
 # GVersion
 
 GVersion is a simplified/faster version of [GitVersion](https://github.com/GitTools/GitVersion) to help you achieve Semantic Versioning on your project.
